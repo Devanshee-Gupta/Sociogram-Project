@@ -1,2 +1,2 @@
-# Sociogram-Project-Roadmap
+# Sociogram-Project
 A Sociogram website using React in frontend, Django in backend and MongoDB database.
