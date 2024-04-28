@@ -5,13 +5,13 @@ import CardContent from "@mui/material/CardContent";
 import AppLogo from "../AppData/AppLogo";
 import Avatar from "@mui/material/Avatar";
 import AppName from "../AppData/AppName";
-// import { signup } from "../../services/SignupService";
+import { signup } from "../../services/SignupService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = ({ showSignUp }) => {
   const INITIAL_USER = {
-    name: "",
+    user_name: "",
     email: "",
     password: "",
   };
@@ -46,7 +46,7 @@ const SignUp = ({ showSignUp }) => {
 
     let newErrors = {};
     const requiredFields = [
-      "name",
+      "user_name",
       "email",
       "password",
     ];
@@ -84,32 +84,31 @@ const SignUp = ({ showSignUp }) => {
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
-      // signup(formData)
-      //   .then(() => {
-      //     toast.success("User registered successfully!");
-      //     handleReloadWithDelay();
-      //     setFormData(INITIAL_USER);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     if (error.response) {
-      //       if (error.response.data.error && error.response.data.error.email)
-      //         toast.error(error.response.data.error.email[0]);
-      //       if (error.response.data.message && error.response.data.message.email)
-      //         toast.error(error.response.data.message.email[0]);
-      //     } else if (error.request) {
-      //       console.error(
-      //         "No response received from the server:",
-      //         error.request
-      //       );
-      //       toast.error("No response received from the server");
-      //     } else {
-      //       console.error("Error during request setup:", error.message);
-      //       toast.error("An error occurred during the request");
-      //     }
-      //   });
-      handleReloadWithDelay();
+      try {
+      signup(formData)
+        .then(() => {
+          toast.success("User registered successfully!");
+          handleReloadWithDelay();
+          setFormData(INITIAL_USER);
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.data.error && error.response.data.error.email)
+              toast.error(error.response.data.error.email[0]);
+            if (error.response.data.message && error.response.data.message.email)
+              toast.error(error.response.data.message.email[0]);
+          } else if (error.request) {
+            toast.error("No response received from the server");
+          } else {
+            toast.error("An error occurred during the request");
+          }
+        });
+      // handleReloadWithDelay();
     }
+    catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    }
+  }
   };
 
   const handleSignIn = () => {
@@ -153,7 +152,7 @@ const SignUp = ({ showSignUp }) => {
                   className="form-control"
                   id="floatingInput1"
                   placeholder="Name"
-                  name="name"
+                  name="user_name"
                   onChange={handleChange}
                 />
                 <label htmlFor="floatingInput1">Name</label>

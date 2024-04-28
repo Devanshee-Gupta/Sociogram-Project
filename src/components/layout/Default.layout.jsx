@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "../SideBar/SideBar";
-// import Authenticate from "../../services/Authenticate";
+import Authenticate from "../../services/Authenticate";
 
 const DefaultLayoutHoc = (Component) => {
   const DefaultLayoutWrapper = (props) => {
-    // const [isAuthenticate, setAuthenticate] = useState(false);
-    const [isAuthenticate, setAuthenticate] = useState(true);
+    const [isAuthenticate, setAuthenticate] = useState(false);
 
     useEffect(() => {
       const func = () => {
-        // let session = document.cookie.match(/session_key=([^;]*)/);
-        // if (!session) {
-        //   setAuthenticate(false);
-        // }
-        // Authenticate(session, setAuthenticate);
+        let session = document.cookie.match(/session_key=([^;]*)/);
+        if (!session) {
+          setAuthenticate(false);
+        }
+        Authenticate(session, setAuthenticate);
       };
       func();
     }, []); // Empty dependency array indicates the effect runs only once

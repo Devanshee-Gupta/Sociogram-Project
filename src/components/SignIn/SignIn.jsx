@@ -5,9 +5,9 @@ import CardContent from "@mui/material/CardContent";
 import AppLogo from "../AppData/AppLogo";
 import Avatar from "@mui/material/Avatar";
 import AppName from "../AppData/AppName";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import signin from "../../services/SigninService";
+import signin from "../../services/SigninService";
 
 const SignIn = ({ showSignUp }) => {
   const navigate = useNavigate();
@@ -26,38 +26,30 @@ const SignIn = ({ showSignUp }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // try {
-    //   signin(formData)
-    //     .then((res) => {
-    //       toast.success(res.message);
-    //       document.cookie = `session_key=${res.session_key}`;
-    //       setFormData({
-    //         email: "",
-    //         password: "",
-    //       });
-    //       navigate("/home");
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       if (error.response) {
-    //         if (error.response.data.error)
-    //           toast.error(error.response.data.error);
-    //       } else if (error.request) {
-    //         console.error(
-    //           "No response received from the server:",
-    //           error.request
-    //         );
-    //         toast.error("No response received from the server");
-    //       } else {
-    //         console.error("Error during request setup:", error.message);
-    //         toast.error("An error occurred during the request");
-    //       }
-    //     });
-    // } catch (error) {
-    //   console.error("Error during login:", error);
-    //   toast.error("Something went wrong. Please try again.");
-    // }
-    navigate('/home');
+    try {
+      signin(formData)
+      .then((res) => {
+          toast.success(res.message);
+          document.cookie = `session_key=${res.session_key}`;
+          setFormData({
+            email: "",
+            password: "",
+          });
+          navigate("/home");
+        })
+        .catch((error) => {
+          if (error.response) {
+            if (error.response.data.error)
+              toast.error(error.response.data.error);
+          } else if (error.request) {
+            toast.error("No response received from the server");
+          } else {
+            toast.error("An error occurred during the request");
+          }
+        });
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   const handleSignUp = () => {
@@ -91,7 +83,7 @@ const SignIn = ({ showSignUp }) => {
       >
         <Card className="bg-transparent w-25 w-md-50 w-s-75 w-xs-100">
           <CardContent>
-            <form action="post" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <h1 className="h3 mb-5 fw-bold text-white text-center">
                 SIGN IN
               </h1>
