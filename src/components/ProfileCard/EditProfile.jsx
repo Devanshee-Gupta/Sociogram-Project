@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import "./EditCard.css";
+import EditProfileService from "../../services/EditProfileService.jsx";
 
 const EditProfile = ({show,setShow}) => {
 
+  let session = document.cookie.match(/session_key=([^;]*)/);
+  const [formData, setFormData] = useState({
+    name : "",
+    bio : ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   const handleClose = () => setShow(false);
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    EditProfileService(session,formData);
+  }
+
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -19,7 +39,9 @@ const EditProfile = ({show,setShow}) => {
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Lorem ipsum dolor sit amet."
+                name="name"
+                onChange={handleChange}
+                placeholder="Enter name here"
                 autoFocus
               />
             </Form.Group>
@@ -28,7 +50,7 @@ const EditProfile = ({show,setShow}) => {
               controlId="exampleForm.ControlTextarea1"
             >
               <Form.Label>Bio</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control as="textarea" rows={3} name="bio" onChange={handleChange} />
             </Form.Group>
           </Form>
         </Modal.Body>
@@ -36,7 +58,7 @@ const EditProfile = ({show,setShow}) => {
           <Button variant="secondary" onClick={handleClose} style={{fontSize:"14px"}}>
             Cancel
           </Button>
-          <Button className="btn btn-dark" onClick={handleClose} style={{fontSize:"14px"}}>
+          <Button className="btn btn-dark" type="submit" onClick={handleSave} style={{fontSize:"14px"}}>
             Save
           </Button>
         </Modal.Footer>

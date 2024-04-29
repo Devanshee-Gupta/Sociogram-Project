@@ -18,7 +18,7 @@ const CardImage = ({ imagesrc }) => {
         component="img"
         width="100%"
         height="auto"
-        image={imagesrc}
+        image={`http://localhost:8000/${imagesrc}`}
         alt="camera capture"
       />
     </Card>

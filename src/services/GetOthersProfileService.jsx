@@ -2,16 +2,16 @@ import axios from 'axios';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const GetAllPostsService = (session,setPostData) => {
+const GetOthersProfileService = (session,userid,setProfileData,setPostsData) => {
     try {
         let session_key = session[1];
         axios
-          .post("http://127.0.0.1:8000/getallposts/", {
-            session_key: session_key,
+          .post(`http://127.0.0.1:8000/${userid}/profile/`, {
+            session_key: session_key
           })
           .then((res) => {
-            setPostData(res.data.Data);
-            console.log(res.data.Data);
+            setProfileData(res.data.Data.profile_data);
+            setPostsData(res.data.Data.posts_data);
           });
       } catch (error) {
         console.error("Error during login:", error);
@@ -19,4 +19,4 @@ const GetAllPostsService = (session,setPostData) => {
       }
 };
 
-export default GetAllPostsService;
+export default GetOthersProfileService;

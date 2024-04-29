@@ -26,29 +26,34 @@ const SignIn = ({ showSignUp }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      signin(formData)
-      .then((res) => {
-          toast.success(res.message);
-          document.cookie = `session_key=${res.session_key}`;
-          setFormData({
-            email: "",
-            password: "",
+
+    if (formData.email === "" || formData.password === "") {
+      toast.error("All fields are required !");
+    } else {
+      try {
+        signin(formData)
+          .then((res) => {
+            toast.success(res.message);
+            document.cookie = `session_key=${res.session_key}`;
+            setFormData({
+              email: "",
+              password: "",
+            });
+            navigate("/home");
+          })
+          .catch((error) => {
+            if (error.response) {
+              if (error.response.data.error)
+                toast.error(error.response.data.error);
+            } else if (error.request) {
+              toast.error("No response received from the server");
+            } else {
+              toast.error("An error occurred during the request");
+            }
           });
-          navigate("/home");
-        })
-        .catch((error) => {
-          if (error.response) {
-            if (error.response.data.error)
-              toast.error(error.response.data.error);
-          } else if (error.request) {
-            toast.error("No response received from the server");
-          } else {
-            toast.error("An error occurred during the request");
-          }
-        });
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      } catch (error) {
+        toast.error("Something went wrong. Please try again.");
+      }
     }
   };
 

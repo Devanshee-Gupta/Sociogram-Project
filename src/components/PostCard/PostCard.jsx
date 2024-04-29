@@ -6,18 +6,17 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import ShareIcon from "@mui/icons-material/Share";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
 const PostCard = ({ post }) => {
+
   return (
     <Card
       sx={{
-        maxWidth: "700px",
+        maxWidth: "550px",
         bgcolor: "transparent",
         color: "white",
         border: "0.5px solid #666363",
@@ -32,17 +31,10 @@ const PostCard = ({ post }) => {
             sx={{ bgcolor: "transparent", cursor: "pointer" }}
             aria-label="profile"
           >
-            <Link to={'/1/profile'} className="text-white">
+            <Link to={`/${post.user}/profile`} className="text-white" 
+            state={{ userid : post.user}}>
             <AccountCircleIcon />
             </Link>
-          </Avatar>
-        }
-        action={
-          <Avatar
-            sx={{ bgcolor: "transparent", cursor: "pointer" }}
-            aria-label="settings"
-          >
-            <MoreHorizIcon />
           </Avatar>
         }
         title={post.post_username}
@@ -54,13 +46,13 @@ const PostCard = ({ post }) => {
         height="auto"
         width="100%"
         style={{ maxHeight: "400px" }}
-        src={post.image}
+        src={`http://localhost:8000/${post.image}`}
         alt="image"
       />
 
-      <CardContent sx={{ color: "white", paddingBottom: 0 }}>
+      <CardContent sx={{ color: "white", paddingBottom: 0 ,margin:"0 0 0 10px"}}>
         <span className="d-flex justify-content-between">
-          <span className="d-flex">
+          <span className="d-flex" style={{marginLeft:"-10px"}}>
             <Avatar
               sx={{ bgcolor: "transparent", cursor: "pointer" }}
               aria-label="like"
@@ -72,12 +64,6 @@ const PostCard = ({ post }) => {
               aria-label="comment"
             >
               <ChatBubbleOutlineIcon />
-            </Avatar>
-            <Avatar
-              sx={{ bgcolor: "transparent", cursor: "pointer" }}
-              aria-label="share"
-            >
-              <ShareIcon />
             </Avatar>
           </span>
           <Avatar
@@ -97,7 +83,7 @@ const PostCard = ({ post }) => {
         </div>
       </CardContent>
 
-      <CardContent sx={{ padding: "10px 0 0 16px" }}>
+      <CardContent sx={{ padding: "10px 0 0 16px" , margin:"0 0 0 10px" }}>
         <Typography
           variant="body2"
           color="white"

@@ -3,7 +3,7 @@ import DefaultLayoutHoc from "../layout/Default.layout";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import addPostIcon from "../../assets/add-image.svg";
 import { ToastContainer, toast } from "react-toastify";
-// import AddPostService from "../../services/AddPostService";
+import AddPostService from "../../services/AddPostService";
 
 const AddPost = ({ openedWindow }) => {
   const INITIAL_POST = {
@@ -12,7 +12,7 @@ const AddPost = ({ openedWindow }) => {
     tags: "",
   };
   const [postData, setPostData] = useState(INITIAL_POST);
-  // let session = document.cookie.match(/session_key=([^;]*)/);
+  let session = document.cookie.match(/session_key=([^;]*)/);
   const [, setErrors] = useState({
     caption: "",
     image: "",
@@ -58,7 +58,7 @@ const AddPost = ({ openedWindow }) => {
           formData &&
           Object.keys(formData).length>0
         ) {
-          // AddPostService(session, formData);
+          AddPostService(session, formData);
           setPostData(INITIAL_POST);
         } else {
           console.error("FormData is empty or invalid.");
@@ -200,7 +200,7 @@ const AddPost = ({ openedWindow }) => {
       </form>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
