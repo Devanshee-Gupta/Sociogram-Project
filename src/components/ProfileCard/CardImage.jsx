@@ -7,10 +7,10 @@ const CardImage = ({ imagesrc }) => {
     <Card
       sx={{
         minWidth: "170px",
-        maxWidth : "400px",
+        margin : "20px auto",
+        maxWidth : "500px",
         bgcolor: "transparent",
         color: "white",
-        margin : "10px auto",
         border: "0.5px solid #666363",
       }}
     >

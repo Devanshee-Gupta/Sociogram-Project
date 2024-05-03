@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import GetAllPostsService from "../../services/GetAllPostsService";
 import "../../App.css";
 
-const Home = ({ openedWindow, setAuthenticate }) => {
+const Home = ({ setAuthenticate, isAuthenticate }) => {
   const navigate = useNavigate();
   // const INITIAL_POSTDATA = [
   //   {
@@ -33,20 +33,25 @@ const Home = ({ openedWindow, setAuthenticate }) => {
   //     post_username: "yashraj",
   //   },
   // ];
-  const [postData,setPostData] = useState([]);
+  const [postData, setPostData] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
   let session = document.cookie.match(/session_key=([^;]*)/);
 
   useEffect(() => {
-    if (!session) {
-      setAuthenticate(false);
-      navigate("/");
-    } else {
-      GetAllPostsService(session, setPostData);
+    function func() {
+      setIsFetching(true);
+      if (!session) {
+        setAuthenticate(false);
+        navigate("/");
+      } else {
+        GetAllPostsService(session, setPostData, setIsFetching);
+      }
     }
-  }, []);
+    func();
+  }
+  // eslint-disable-next-line
+  , [isAuthenticate]);
 
-
-  
   return (
     <>
       <div className="row m-0 p-0 w-100">
@@ -58,15 +63,31 @@ const Home = ({ openedWindow, setAuthenticate }) => {
               overflow: "scroll",
             }}
           >
-            {postData.length > 0 ? (
-              postData.map((post) => (
-                <PostCard key={post.post_id} post={post} />
-              ))
+            {!isFetching ? (
+              <>
+                {postData.length > 0 ? (
+                  postData.map((post) => (
+                    <PostCard key={post.post_id} post={post} />
+                  ))
+                ) : (
+                  <div className="d-flex h-100 pb-5 w-100 justify-content-center align-items-center">
+                    <h1
+                      className="text-white-50"
+                      style={{ fontFamily: "cursive" }}
+                    >
+                      Nothing to show
+                    </h1>
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="d-flex h-100 pb-5 w-100 justify-content-center align-items-center">
-                <h1 className="text-white-50" style={{ fontFamily: "cursive" }}>
-                  Nothing to show
-                </h1>
+              <div
+                className="d-flex flex-column w-100 justify-content-center align-items-center text-white"
+                style={{ minHeight: "100vh" }}
+              >
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
               </div>
             )}
           </div>

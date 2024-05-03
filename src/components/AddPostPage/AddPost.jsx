@@ -1,22 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultLayoutHoc from "../layout/Default.layout";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import addPostIcon from "../../assets/add-image.svg";
 import { ToastContainer, toast } from "react-toastify";
 import AddPostService from "../../services/AddPostService";
+import { useNavigate } from "react-router-dom";
 
-const AddPost = ({ openedWindow }) => {
+const AddPost = ({isAuthenticate, setAuthenticate}) => {
+
   const INITIAL_POST = {
     caption: "",
     image: null, // Change to null to properly handle file upload
     tags: "",
   };
   const [postData, setPostData] = useState(INITIAL_POST);
+  const navigate = useNavigate();
   let session = document.cookie.match(/session_key=([^;]*)/);
   const [, setErrors] = useState({
     caption: "",
     image: "",
   });
+
+  useEffect(() => {
+      
+    if (!session) {
+      setAuthenticate(false);
+      navigate("/");
+    }
+  }
+  // eslint-disable-next-line
+  , [isAuthenticate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import GetOwnProfileService from "../../services/GetOwnProfileService.jsx";
 import { ToastContainer } from "react-toastify";
 
-const ProfileCard = ({ setAuthenticate }) => {
+const ProfileCard = ({ isAuthenticate, setAuthenticate }) => {
   const [editFormShow, setEditFormShow] = useState(false);
   const [changePassShow, setChangePassShow] = useState(false);
   const [profileData, setProfileData] = useState([]);
@@ -20,6 +20,7 @@ const ProfileCard = ({ setAuthenticate }) => {
   const navigate = useNavigate();
   let session = document.cookie.match(/session_key=([^;]*)/);
 
+  
   useEffect(() => {
     if (!session) {
       setAuthenticate(false);
@@ -27,7 +28,10 @@ const ProfileCard = ({ setAuthenticate }) => {
     } else {
       GetOwnProfileService(session, setProfileData, setPostsData);
     }
-  }, []);
+    
+  }
+  // eslint-disable-next-line
+  , [isAuthenticate]);
 
   
   return (
