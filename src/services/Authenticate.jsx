@@ -1,18 +1,17 @@
 import axios from "axios";
 
-const Authenticate = (session,setAuthenticate,setIsFetching) => {
+const Authenticate = async (session,setAuthenticate,setIsFetching) => {
 
   if(!session) return;
   try {
     let session_key = session[1];
-    axios
+    await axios
       .post("http://127.0.0.1:8000/authenticate/", {
         session_key: session_key,
       })
       .then((res) => {
         if (res.data.success) {
           setAuthenticate(true);
-          setIsFetching(false);
         }
       })
       .catch((error) => {
@@ -24,11 +23,13 @@ const Authenticate = (session,setAuthenticate,setIsFetching) => {
           console.error("Error during request setup:", error.message);
         }
       });
+
+      setIsFetching(false);
   } catch (error) {
     console.error("Error :", error);
+    setIsFetching(false);
   }
 
-  setIsFetching(false);
 };
 
 export default Authenticate;

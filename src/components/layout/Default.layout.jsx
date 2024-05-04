@@ -13,8 +13,9 @@ const DefaultLayoutHoc = (Component) => {
         let session = document.cookie.match(/session_key=([^;]*)/);
         if (!session) {
           setAuthenticate(false);
+          setIsFetching(false);
         }
-        Authenticate(session, setAuthenticate,setIsFetching);
+        else Authenticate(session, setAuthenticate,setIsFetching);
       };
       func();
     }, []); 

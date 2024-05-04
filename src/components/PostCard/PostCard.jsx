@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -8,10 +8,11 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, handleLike, handleUnlike }) => {
 
   return (
     <Card
@@ -31,9 +32,12 @@ const PostCard = ({ post }) => {
             sx={{ bgcolor: "transparent", cursor: "pointer" }}
             aria-label="profile"
           >
-            <Link to={`/${post.user}/profile`} className="text-white" 
-            state={{ userid : post.user}}>
-            <AccountCircleIcon />
+            <Link
+              to={`/${post.user}/profile`}
+              className="text-white"
+              state={{ userid: post.user }}
+            >
+              <AccountCircleIcon />
             </Link>
           </Avatar>
         }
@@ -50,14 +54,20 @@ const PostCard = ({ post }) => {
         alt="image"
       />
 
-      <CardContent sx={{ color: "white", paddingBottom: 0 ,margin:"0 0 0 10px"}}>
+      <CardContent
+        sx={{ color: "white", paddingBottom: 0, margin: "0 0 0 10px" }}
+      >
         <span className="d-flex justify-content-between">
-          <span className="d-flex" style={{marginLeft:"-10px"}}>
+          <span className="d-flex" style={{ marginLeft: "-10px" }}>
             <Avatar
               sx={{ bgcolor: "transparent", cursor: "pointer" }}
               aria-label="like"
             >
-              <FavoriteBorderIcon />
+              {post.has_liked === "false" ? (
+                <FavoriteBorderIcon onClick={(e) => handleLike(post.post_id)} />
+              ) : (
+                <FavoriteIcon onClick={(e) => handleUnlike(post.post_id)} />
+              )}
             </Avatar>
             <Avatar
               sx={{ bgcolor: "transparent", cursor: "pointer" }}
@@ -83,7 +93,7 @@ const PostCard = ({ post }) => {
         </div>
       </CardContent>
 
-      <CardContent sx={{ padding: "10px 0 0 16px" , margin:"0 0 0 10px" }}>
+      <CardContent sx={{ padding: "10px 0 0 16px", margin: "0 0 0 10px" }}>
         <Typography
           variant="body2"
           color="white"

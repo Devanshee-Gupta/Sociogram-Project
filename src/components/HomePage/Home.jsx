@@ -4,6 +4,8 @@ import DefaultLayoutHoc from "../layout/Default.layout";
 import { useNavigate } from "react-router-dom";
 import GetAllPostsService from "../../services/GetAllPostsService";
 import "../../App.css";
+import LikePostService from "../../services/LikePostService";
+import UnlikePostService from "../../services/UnlikePostService";
 
 const Home = ({ setAuthenticate, isAuthenticate }) => {
   const navigate = useNavigate();
@@ -35,22 +37,36 @@ const Home = ({ setAuthenticate, isAuthenticate }) => {
   // ];
   const [postData, setPostData] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
+  const [reload, setReload] = useState(false);
   let session = document.cookie.match(/session_key=([^;]*)/);
 
-  useEffect(() => {
-    function func() {
-      setIsFetching(true);
-      if (!session) {
-        setAuthenticate(false);
-        navigate("/");
-      } else {
-        GetAllPostsService(session, setPostData, setIsFetching);
+  useEffect(
+    () => {
+      function func() {
+        setIsFetching(true);
+        if (!session) {
+          setAuthenticate(false);
+          navigate("/");
+        } else {
+          GetAllPostsService(session, setPostData, setIsFetching);
+        }
       }
-    }
-    func();
-  }
-  // eslint-disable-next-line
-  , [isAuthenticate]);
+      func();
+    },
+    // eslint-disable-next-line
+    [isAuthenticate, reload]
+  );
+
+  const handleLike = async (post_id) => {
+    await LikePostService(session, post_id);
+    setReload(!reload);
+  }; 
+
+  const handleUnlike = async (post_id) => {
+    await UnlikePostService(session, post_id);
+    setReload(!reload);
+  };
+
 
   return (
     <>
@@ -67,7 +83,12 @@ const Home = ({ setAuthenticate, isAuthenticate }) => {
               <>
                 {postData.length > 0 ? (
                   postData.map((post) => (
-                    <PostCard key={post.post_id} post={post} />
+                    <PostCard
+                      key={post.post_id}
+                      post={post}
+                      handleLike={handleLike}
+                      handleUnlike={handleUnlike}
+                    />
                   ))
                 ) : (
                   <div className="d-flex h-100 pb-5 w-100 justify-content-center align-items-center">
