@@ -9,10 +9,10 @@ import Typography from "@mui/material/Typography";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 
-const PostCard = ({ post, handleLike, handleUnlike }) => {
+const PostCard = ({ post, handleLike, handleUnlike, handleSave, handleUnsave }) => {
 
   return (
     <Card
@@ -69,18 +69,16 @@ const PostCard = ({ post, handleLike, handleUnlike }) => {
                 <FavoriteIcon onClick={(e) => handleUnlike(post.post_id)} />
               )}
             </Avatar>
-            <Avatar
-              sx={{ bgcolor: "transparent", cursor: "pointer" }}
-              aria-label="comment"
-            >
-              <ChatBubbleOutlineIcon />
-            </Avatar>
           </span>
           <Avatar
             sx={{ bgcolor: "transparent", cursor: "pointer" }}
             aria-label="save"
           >
-            <BookmarkBorderIcon />
+            {post.has_saved === "false" ? (
+                <BookmarkBorderIcon onClick={(e) => handleSave(post.post_id)} />
+              ) : (
+                <BookmarkIcon onClick={(e) => handleUnsave(post.post_id)} />
+              )}
           </Avatar>
         </span>
         <Typography variant="body2" color="white">
@@ -93,39 +91,6 @@ const PostCard = ({ post, handleLike, handleUnlike }) => {
         </div>
       </CardContent>
 
-      <CardContent sx={{ padding: "10px 0 0 16px", margin: "0 0 0 10px" }}>
-        <Typography
-          variant="body2"
-          color="white"
-          sx={{
-            bgcolor: "transparent",
-            display: "block",
-            fontSize: "1rem",
-            margin: "0 10px 0 0",
-            width: "100%",
-          }}
-        >
-          Comments
-        </Typography>
-        <Typography variant="div">
-          {post.comments &&
-            post.comments.map((comment) => {
-              return (
-                <div key={comment.comment_id}>
-                  <span className="text-white-50 me-2">
-                    {comment.comment_username}
-                  </span>
-                  <span
-                    className="text-white-75"
-                    style={{ fontSize: "0.9rem" }}
-                  >
-                    {comment.commented_text}
-                  </span>
-                </div>
-              );
-            })}
-        </Typography>
-      </CardContent>
     </Card>
   );
 };

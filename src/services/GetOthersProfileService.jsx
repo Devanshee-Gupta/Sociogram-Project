@@ -12,6 +12,17 @@ const GetOthersProfileService = (session,userid,setProfileData,setPostsData) => 
           .then((res) => {
             setProfileData(res.data.Data.profile_data);
             setPostsData(res.data.Data.posts_data);
+          }).catch((error) => {
+            if (error.response) {
+              let message = error.response.data;
+              if (message.error) toast.error(message.error);
+            } else if (error.request) {
+              console.error("No response received from the server:", error.request);
+              toast.error("No response received from the server");
+            } else {
+              console.error("Error during request setup:", error.message);
+              toast.error("An error occurred during the request");
+            }
           });
       } catch (error) {
         console.error("Error during login:", error);

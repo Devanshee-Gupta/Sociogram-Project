@@ -10,6 +10,7 @@ import EditProfile from "./EditProfile";
 import ChangePassword from "./ChangePassword";
 import { Link, useNavigate } from "react-router-dom";
 import GetOwnProfileService from "../../services/GetOwnProfileService.jsx";
+import DeleteAccountService from "../../services/DeleteAccountService.jsx";
 import { ToastContainer } from "react-toastify";
 
 const ProfileCard = ({ isAuthenticate, setAuthenticate }) => {
@@ -33,6 +34,10 @@ const ProfileCard = ({ isAuthenticate, setAuthenticate }) => {
   // eslint-disable-next-line
   , [isAuthenticate]);
 
+  const handleDeleteAccount= async(session)=>{
+    await DeleteAccountService(session);
+    navigate('/');
+  }
   
   return (
     <div className="w-75">
@@ -85,6 +90,16 @@ const ProfileCard = ({ isAuthenticate, setAuthenticate }) => {
                       onClick={(e) => setChangePassShow(true)}
                     >
                       Change Password
+                    </Link>
+                  </li>
+                  <li className="mt-1">
+                    <Link
+                      role="button"
+                      className="btn dropdown-item p-0 text-center"
+                      style={{ fontSize: "14px" }}
+                      onClick={(e) => handleDeleteAccount(session)}
+                    >
+                      Delete Account
                     </Link>
                   </li>
                 </ul>

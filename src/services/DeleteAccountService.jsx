@@ -2,19 +2,24 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const LogoutService = async (session, setAuthenticate) => {
-
-  let temp = session[1];
+const DeleteAccountService = async (session) => {
   try {
+    let session_key = session[1];
     await axios
-      .post("http://127.0.0.1:8000/logout/", {
-        session_key: session[1],
+      .delete("http://127.0.0.1:8000/deleteaccount/", {
+        data :{
+          session_key: session_key
+        },
       })
       .then((res) => {
-        document.cookie = `session_key=${temp}; expires=Thu, 18 Dec 2013 12:00:00 UTC; path=/;`;
-        toast.success("Logged out successfully!");
-        setAuthenticate(false);
-      }).catch((error) => {
+        if (res.data.message) {
+          toast.success(res.data.message);
+        }
+        if (res.data.error) {
+          toast.error(res.data.error);
+        }
+      })
+      .catch((error) => {
         if (error.response) {
           let message = error.response.data;
           if (message.error) toast.error(message.error);
@@ -27,10 +32,9 @@ const LogoutService = async (session, setAuthenticate) => {
         }
       });
   } catch (error) {
+    console.error("Error during adding to cart:", error);
     toast.error("Something went wrong. Please try again.");
-    // console.error("Error during login:", error);
   }
-
 };
 
-export default LogoutService;
+export default DeleteAccountService;

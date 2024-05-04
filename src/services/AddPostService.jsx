@@ -1,10 +1,8 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddPostService = (session, formData) => {
-  const navigate = useNavigate();
+const AddPostService = (session, formData,navigate) => {
   try {
     let session_key = session[1];
     axios
@@ -22,7 +20,18 @@ const AddPostService = (session, formData) => {
       )
       .then((res) => {
         toast.success(res.data.message);
-        navigate('/');
+        navigate('/home');
+      }).catch((error) => {
+        if (error.response) {
+          let message = error.response.data;
+          if (message.error) toast.error(message.error);
+        } else if (error.request) {
+          console.error("No response received from the server:", error.request);
+          toast.error("No response received from the server");
+        } else {
+          console.error("Error during request setup:", error.message);
+          toast.error("An error occurred during the request");
+        }
       });
   } catch (error) {
     console.log("Error:", error);

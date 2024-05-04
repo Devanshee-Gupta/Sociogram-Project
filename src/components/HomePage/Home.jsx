@@ -6,6 +6,9 @@ import GetAllPostsService from "../../services/GetAllPostsService";
 import "../../App.css";
 import LikePostService from "../../services/LikePostService";
 import UnlikePostService from "../../services/UnlikePostService";
+import { ToastContainer } from "react-toastify";
+import AddToListService from "../../services/AddToListService";
+import DeleteFromListService from "../../services/DeleteFromListService";
 
 const Home = ({ setAuthenticate, isAuthenticate }) => {
   const navigate = useNavigate();
@@ -67,6 +70,15 @@ const Home = ({ setAuthenticate, isAuthenticate }) => {
     setReload(!reload);
   };
 
+  const handleSave = async (post_id) => {
+    await AddToListService(session, post_id);
+    setReload(!reload);
+  }; 
+
+  const handleUnsave = async (post_id) => {
+    await DeleteFromListService(session, post_id);
+    setReload(!reload);
+  };
 
   return (
     <>
@@ -88,6 +100,8 @@ const Home = ({ setAuthenticate, isAuthenticate }) => {
                       post={post}
                       handleLike={handleLike}
                       handleUnlike={handleUnlike}
+                      handleSave={handleSave}
+                      handleUnsave={handleUnsave}
                     />
                   ))
                 ) : (
@@ -114,6 +128,16 @@ const Home = ({ setAuthenticate, isAuthenticate }) => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

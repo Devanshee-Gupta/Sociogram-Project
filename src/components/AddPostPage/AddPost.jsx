@@ -7,14 +7,14 @@ import AddPostService from "../../services/AddPostService";
 import { useNavigate } from "react-router-dom";
 
 const AddPost = ({isAuthenticate, setAuthenticate}) => {
-
+  
+  const navigate = useNavigate();
   const INITIAL_POST = {
     caption: "",
     image: null, // Change to null to properly handle file upload
     tags: "",
   };
   const [postData, setPostData] = useState(INITIAL_POST);
-  const navigate = useNavigate();
   let session = document.cookie.match(/session_key=([^;]*)/);
   const [, setErrors] = useState({
     caption: "",
@@ -22,7 +22,6 @@ const AddPost = ({isAuthenticate, setAuthenticate}) => {
   });
 
   useEffect(() => {
-      
     if (!session) {
       setAuthenticate(false);
       navigate("/");
@@ -71,7 +70,7 @@ const AddPost = ({isAuthenticate, setAuthenticate}) => {
           formData &&
           Object.keys(formData).length>0
         ) {
-          AddPostService(session, formData);
+          AddPostService(session, formData,navigate);
           setPostData(INITIAL_POST);
         } else {
           console.error("FormData is empty or invalid.");
@@ -82,7 +81,7 @@ const AddPost = ({isAuthenticate, setAuthenticate}) => {
     }
   };
 
-  function displaySelectedImage(event, elementId, svgId) {
+  const displaySelectedImage = (event, elementId, svgId) => {
     const selectedImage = document.getElementById(elementId);
     const selectedSvg = document.getElementById(svgId);
     const fileInput = event.target;
